@@ -1,5 +1,7 @@
 #ifndef U05_HASH_HASHMAP_HASHENTRY_H_
 #define U05_HASH_HASHMAP_HASHENTRY_H_
+#include <iostream>
+using namespace std;
 
 template <class K, class T>
 class HashEntry

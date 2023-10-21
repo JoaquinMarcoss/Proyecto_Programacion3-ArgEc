@@ -1,6 +1,5 @@
 #ifndef U05_HASH_HASHMAP_HASHMAP_H_
 #define U05_HASH_HASHMAP_HASHMAP_H_
-
 #include "HashEntry.h"
 
 template <class K, class T>
