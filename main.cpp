@@ -2,6 +2,9 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <time.h>
+#include <cmath>
+#include <cctype>
 #define ARCHIVO "C:\\Users\\Joaquin\\Desktop\\Proyecto_Programacion3-ArgEc\\Inventariado_Fisico.csv"
 #include <C:\Users\Joaquin\Desktop\Proyecto_Programacion3-ArgEc\Lista\Lista.h>
 #include <C:\Users\Joaquin\Desktop\Proyecto_Programacion3-ArgEc\Cola\Cola.h>
@@ -11,14 +14,207 @@
 
 using namespace std;
 
-void min_stock(int n){}
-void min_stock(int n, int deposito){}
-void stock(string nombre_articulo){}
-void max_stock(int n){}
+void Cant_Articulos(){
+    int total_art_dif=0; // total de articulos
+    int total_art=0; // total de articulos
 
+    ifstream archivo(ARCHIVO);
+    string linea;
+
+    getline(archivo,linea);//descartamos el encabezado
+
+    while(getline(archivo,linea)){
+        stringstream s(linea);//convertimos la cadena a un objeto el cual un programa puede insertar o extraer datos
+        string Grupo;
+        getline(s,Grupo,',');
+        if(Grupo.size()>0) total_art++;
+        total_art_dif++;
+    }
+    cout << endl << " Total de articulos: " << total_art;
+    cout << endl << " Total de articulos diferentes: " << total_art_dif;
+    archivo.close();
+}
+
+void min_stock(int n){
+    ifstream archivo(ARCHIVO);
+    string line, Nombre_Art, Cols;
+    int i, Cant_cols=0;
+
+    getline(archivo, line);//encabezado
+    stringstream c(line);
+    while(getline(c, Cols, ',')){
+        Cant_cols++;
+    }
+
+    while (getline(archivo, line)){
+        stringstream s(line);
+        string word;
+        int num = 0, Cant_art = 0;
+        for (i = 0; i<Cant_cols; i++) {
+            getline(s, word, ',');
+            if (i == 2) {
+                Nombre_Art = word;
+            }
+            if (i > 2){
+                try {
+                    num = stoi(word);
+                    if(num > 0){
+                        Cant_art += num;
+                    }
+                }catch (const invalid_argument &e){}
+            }
+        }
+        if(Cant_art<=n){
+        cout<<endl<<" Nombre del Articulo: "<<Nombre_Art;
+        cout<<endl<<" Stock: "<<Cant_art;
+        }
+    }
+}
+
+void min_stock(int n, int deposito){
+    ifstream archivo(ARCHIVO);
+    string line, Nombre_Art, Cols;
+    int i, Cant_cols=0;
+
+    getline(archivo, line);//encabezado
+    stringstream c(line);
+    while(getline(c, Cols, ',')){
+        Cant_cols++;
+    }
+
+    while (getline(archivo, line)) {
+        stringstream s(line);
+        string word;
+        int num = 0, Cant_art = 0;
+        for (i = 0; i<Cant_cols; i++) {
+            getline(s, word, ',');
+            if (i == 2){
+                Nombre_Art = word;
+            }
+            if (i == deposito+2){
+                try{
+                    Cant_art = stoi(word);
+                }catch (const invalid_argument &e){}
+            }
+        }
+        if(Cant_art!=0 && Cant_art<=n){
+            cout<<endl<<" Nombre del Articulo: "<<Nombre_Art;
+            cout<<endl<<" Stock en el Deposito "<<deposito<<": "<<Cant_art;
+        }
+    }
+}
+
+void stock(string nombre_articulo){
+
+}
+
+void stock(string nombre_articulo, int deposito){
+    ifstream archivo(ARCHIVO);
+    string line, Nombre_Art, Cols;
+    int i, Cant_cols=0;
+
+    getline(archivo, line);//encabezado
+    stringstream c(line);
+    while(getline(c, Cols, ',')){
+        Cant_cols++;
+    }
+
+    while (getline(archivo, line)) {
+        stringstream s(line);
+        string word;
+        int num = 0, Cant_art = 0;
+        for (i = 0; i<Cant_cols; i++) {
+            getline(s, word, ',');
+            if (i == 2){
+                Nombre_Art = word;
+            }
+            if (i == deposito+2){
+                try{
+                    Cant_art = stoi(word);
+                }catch (const invalid_argument &e){}
+            }
+        }
+        if(Cant_art!=0){
+            cout<<endl<<" Nombre del Articulo: "<<Nombre_Art;
+            cout<<endl<<" Stock en el Deposito "<<deposito<<": "<<Cant_art;
+        }
+    }
+}
+
+void max_stock(int n) {
+    ifstream archivo(ARCHIVO);
+    string line, Nombre_Art;
+    int i;
+
+    getline(archivo, line);
+
+    while (getline(archivo, line)) {
+        stringstream s(line);
+        string word;
+        int num = 0, Cant_art = 0;
+        for (i = 0; i < 8; i++) {
+            getline(s, word, ',');
+            if (i == 2) {
+                Nombre_Art = word;
+            }
+            if (i > 2){
+                try {
+                    num = stoi(word);
+                    if(num > 0){
+                        Cant_art += num;
+                    }
+                }catch (const invalid_argument &e){}
+            }
+        }
+        if(Cant_art>=n){
+            cout<<endl<<" Nombre del Articulo: "<<Nombre_Art;
+            cout<<endl<<" Stock: "<<Cant_art;
+        }
+    }
+}
 
 int main(){
-    ifstream archivo(ARCHIVO);
+    clock_t begin;
+    cout << "Comenzando a medir Tiempo\n" << endl;
+    begin = clock();
+
+    Cant_Articulos();
+    cout<<endl<<"\nMINIMO STOCK ";
+    min_stock(50);
+    cout<<endl<<"\nMAXIMO STOCK ";
+    max_stock(2);
+    cout<<endl<<"\nMINIMO STOCK POR DEPOSITO ";
+    min_stock(28,3);
+
+
+    cout<<endl;
+    clock_t end = clock();
+    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
+    cout << "Tardo elapsed_secs " << elapsed_secs << "\n" << std::endl;
+    return 0;
+}
+
+
+
+
+
+
+
+/*clock_t begin;
+    cout << "Comenzando a medir Tiempo\n" << endl;
+
+    begin = clock();
+    /*
+     * Insertar código a medir tiempo aquí
+
+    clock_t end = clock();
+
+    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
+
+    cout << "Tardo elapsed_secs" << elapsed_secs << "\n" << std::endl;*/
+
+/*
+ * ifstream archivo(ARCHIVO);
     string linea;
     int total_art_dif=0; // total de articulos diferentes
     int total_art=0; // total de articulos
@@ -64,24 +260,4 @@ int main(){
     cout<<endl<<" Total de articulos diferentes: "<<total_art_dif;
     archivo.close();
     return 0;
-}
-
-
-
-
-
-
-
-
-/*clock_t begin;
-    cout << "Comenzando a medir Tiempo\n" << endl;
-
-    begin = clock();
-    /*
-     * Insertar código a medir tiempo aquí
-
-    clock_t end = clock();
-
-    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
-
-    cout << "Tardo elapsed_secs" << elapsed_secs << "\n" << std::endl;*/
+}*/
