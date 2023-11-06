@@ -4,29 +4,29 @@
 using namespace std;
 
 template<class T>
-class Nodo{
-    private:
-        T dato;
-        Nodo<T> *siguiente;
-    
-    public:
-       T getDato(){
-           return dato;
-       }
+class Nodo {
+private:
+    T dato;
+    Nodo<T> *siguiente;
 
-       void setDato(T d){
-           dato = d;
-       }
+public:
+    Nodo(T d, Nodo<T> *s) : dato(d), siguiente(s) {}
 
-       Nodo<T> *getSiguiente(){
-           return siguiente;
-       }
+    T getDato() {
+        return dato;
+    }
 
-       void setSiguiente(Nodo<T> *siguiente){
-           this->siguiente = siguiente;
-       }
+    void setDato(T d) {
+        dato = d;
+    }
 
+    Nodo<T> *getSiguiente() {
+        return siguiente;
+    }
 
+    void setSiguiente(Nodo<T> *s) {
+        siguiente = s;
+    }
 };
 
 #endif //NODO_H

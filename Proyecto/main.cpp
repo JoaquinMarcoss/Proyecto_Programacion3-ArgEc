@@ -4,6 +4,7 @@
 #include <iostream>
 #include <time.h>
 #include <cmath>
+#include <vector>
 #include <cctype>
 #include "../Lista/Lista.h"
 #include "../Pila/Pila.h"
@@ -14,11 +15,19 @@
 #define ARCHIVO "C:\\Users\\Joaquin\\Desktop\\Proyecto_Programacion3-ArgEc\\Inventariado_Fisico.csv"
 using namespace std;
 
-void Cant_Articulos(){}
+void Total_Articulos(int total_art){
+    cout<<endl<<" Cantidad total de articulos totales: "<<total_art;
+}
 
-void min_stock(HashMap<int,string> H_min){
-    cout<<endl<<" --MINIMO STOCK--"<<endl;
-    H_min.print();
+void Total_Articulos_Diferentes(int total_art_dif){
+    cout<<endl<<" Cantidad total de articulos totales diferentes: "<<total_art_dif;
+}
+
+void min_stock(Lista<string> Lista_Min_Stock){
+    cout<<endl<<" \n--MINIMO STOCK-- ";
+    for(int i=0; i<Lista_Min_Stock.getTamanio(); i++){
+        cout<<endl<<" Articulo: "<<Lista_Min_Stock.getDato(i);
+    }
 }
 
 void min_stock(int n, int deposito){
@@ -54,58 +63,83 @@ void min_stock(int n, int deposito){
     }
 }
 
-void stock(string nombre_articulo){
+void stock_Nombre(string nombre_articulo){
 
 }
 
-void stock(string nombre_articulo, int deposito){
-    ifstream archivo(ARCHIVO);
-    string line, Nombre_Art, Cols;
-    int i, Cant_cols=0;
-
-    getline(archivo, line);//encabezado
-    stringstream c(line);
-    while(getline(c, Cols, ',')){
-        Cant_cols++;
+unsigned int HashFunc(string clave) {
+    unsigned int hash = 0;
+    // Sumar los valores ASCII de los caracteres en la clave
+    for (char c : clave) {
+        hash += static_cast<unsigned int>(c);
     }
-
-    while (getline(archivo, line)) {
-        stringstream s(line);
-        string word;
-        int num = 0, Cant_art = 0;
-        for (i = 0; i<Cant_cols; i++) {
-            getline(s, word, ',');
-            if (i == 2){
-                Nombre_Art = word;
-            }
-            if (i == deposito+2){
-                try{
-                    Cant_art = stoi(word);
-                }catch (const invalid_argument &e){}
-            }
-        }
-        if(Cant_art!=0){
-            cout<<endl<<" Nombre del Articulo: "<<Nombre_Art;
-            cout<<endl<<" Stock en el Deposito "<<deposito<<": "<<Cant_art;
-        }
-    }
+    // Aplicar una operación módulo para obtener un índice válido en la tabla hash
+    hash = hash % 100000;
+    cout<<endl<<" Hash para la clave: "<<clave<<": "<<hash;
+    return hash;
 }
 
-void max_stock(HashMap<int,string> H_max){
-    cout<<endl<<" --MAXIMO STOCK--"<<endl;
-    H_max.print();
-}
-
-int main(int argc, char **argv){
+void stock_Deposito(string nombre_articulo){
     ifstream archivo(ARCHIVO);
     string line, Nombre_Art, Cols;
     int i, Cant_cols = 0, total_art=0, total_art_dif=0, n=80;
-    HashMap<int, string> Art_Min_Stock(500);
-    HashMap<int, string> Art_Max_Stock(500);
-
-
+    vector<int> Vector_Depositos;
+    HashMap<string, vector<int>> Hash_Articulos(100000, &HashFunc);
     getline(archivo, line);//encabezado
     stringstream c(line);
+
+    while (getline(c, Cols, ',')){
+        Cant_cols++;
+    }
+
+    while (getline(archivo, line)){
+        stringstream s(line);//convertimos la cadena a un objeto el cual un programa puede insertar o extraer datos
+        string Deposito;
+        string word;
+        vector<int> Lista_Depositos(Cant_cols-3, 0);
+        int num=0, Cant_art=0;
+        for (i = 0; i < Cant_cols; i++){
+            getline(s, word, ',');
+
+            if(i==2) Nombre_Art = word;
+
+            if (i > 2){
+                if(word.size()>0) {
+                    num = stoi(word);
+                    Lista_Depositos[i] = num;
+                }else{
+                    Lista_Depositos[i] = 0;
+                }
+            }
+        }
+        Hash_Articulos.put(Nombre_Art, Lista_Depositos);
+    }
+    vector<int> Deposito;
+    Deposito = Hash_Articulos.get(nombre_articulo);
+    for(int i=0; i<5; i++){
+        cout<<endl<<Deposito[i];
+    }
+}
+
+void max_stock(Lista<string> Lista_Max_Stock){
+    cout<<endl<<" \n--MAXIMO STOCK-- ";
+    for(int i=0; i<Lista_Max_Stock.getTamanio(); i++){
+        cout<<endl<<" Articulo: "<<Lista_Max_Stock.getDato(i);
+    }
+}
+
+
+
+int main(){
+    ifstream archivo(ARCHIVO);
+    string line, Nombre_Art, Cols;
+    int i, Cant_cols = 0, total_art=0, total_art_dif=0, n=80;
+    vector<int> Vector_Depositos;
+    Lista<string> Lista_Min_Stock;
+    Lista<string> Lista_Max_Stock;
+    getline(archivo, line);//encabezado
+    stringstream c(line);
+
     while (getline(c, Cols, ',')){
         Cant_cols++;
     }
@@ -128,21 +162,23 @@ int main(int argc, char **argv){
                 }
             }
         }
-        if(Cant_art<=n) Art_Min_Stock.put(Cant_art, Nombre_Art);
-        if(Cant_art>=n) Art_Max_Stock.put(Cant_art, Nombre_Art);
+        if(Cant_art<=n) Lista_Min_Stock.insertarUltimo(Nombre_Art);
+        if(Cant_art>=n) Lista_Max_Stock.insertarUltimo(Nombre_Art);
         total_art_dif++;
         }
 
         archivo.close();
-
+        string Nombre;
         clock_t begin; //Declacaramos el contador
         cout << "Comenzando a medir Tiempo\n" << endl;
         begin = clock(); //Empieza el contador
 
-        cout<<endl<<total_art;
-        cout<<endl<<total_art_dif<<endl;
-        min_stock(Art_Min_Stock);
-        max_stock(Art_Max_Stock);
+
+        //Total_Articulos(total_art);
+        //Total_Articulos_Diferentes(total_art_dif);
+        //min_stock(Lista_Min_Stock);
+        //max_stock(Lista_Max_Stock);
+        stock_Deposito("BANQUETA TAPIZADA COST BCO  BASE PINTADA NEGRO");
 
         cout << endl;
         clock_t end = clock();

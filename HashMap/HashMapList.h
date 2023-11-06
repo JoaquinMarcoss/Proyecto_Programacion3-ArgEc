@@ -4,6 +4,7 @@
 #include "HashEntry.h"
 #include "../Lista/Lista.h"
 
+
 //Tabla hash con manejo de colisiones usando listas enlazadas
 template <class K, class T>
 class HashMapList {
@@ -32,6 +33,7 @@ public:
     bool esVacio();
 
     void print();
+
 };
 
 template <class K, class T>
@@ -67,12 +69,13 @@ template <class K, class T>
 void HashMapList<K, T>::put(K clave, T valor) {
     unsigned int pos = hashFuncP(clave) % tamanio;
 
-    if(tabla[pos] == NULL) {
+    if (tabla[pos] == nullptr) {
         tabla[pos] = new Lista<HashEntry<K, T>>();
     }
 
-    tabla[pos]->insertarUltimo(new HashEntry<K, T>(clave, valor));
+    tabla[pos]->insertarUltimo(HashEntry<K, T>(clave, valor));
 }
+
 
 template <class K, class T>
 void HashMapList<K, T>::remove(K clave) {
