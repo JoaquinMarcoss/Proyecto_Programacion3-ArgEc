@@ -35,7 +35,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "U00-E06::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-U00-E06-Debug-ebb432a64de70dbc4e5c.json",
+					"jsonFile" : "target-U00-E06-Debug-efdc036f6d0bdd89a23a.json",
 					"name" : "U00-E06",
 					"projectIndex" : 0
 				}
@@ -51,6 +51,6 @@
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 4
+		"minor" : 5
 	}
 }

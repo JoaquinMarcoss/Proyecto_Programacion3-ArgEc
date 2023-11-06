@@ -87,10 +87,8 @@ void HashMap<K, T>::put(K clave, T valor)
 {
   unsigned int pos = hashFuncP(clave) % tamanio;
 
-  if (tabla[pos] != NULL)
-  {
-    //Manejar la Colision!!!!!!!
-    throw 409;
+  while(tabla[pos]!=NULL){
+    pos++;
   }
 
   tabla[pos] = new HashEntry<K, T>(clave, valor); //Corresponde a una fila en la tabla HASH
@@ -122,21 +120,21 @@ template <class K, class T>
 void HashMap<K, T>::print()
 {
 
-  std::cout << "i"
-            << " "
+  std::cout << " i "
+            << "    "
             << "Clave"
             << "\t\t"
             << "Valor" << std::endl;
   std::cout << "--------------------" << std::endl;
   for (int i = 0; i < tamanio; i++)
   {
-    std::cout << i << " ";
     if (tabla[i] != NULL)
     {
+      std::cout << i << "    ";
       std::cout << tabla[i]->getClave() << "\t\t";
-      std::cout << tabla[i]->getValor();
+      std::cout << tabla[i]->getValor()<<endl;
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
   }
 }
 
