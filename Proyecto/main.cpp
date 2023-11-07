@@ -11,36 +11,80 @@
 using namespace std;
 
 void Total_Articulos(int total_art){
+    clock_t begin; //Declacaramos el contador
+    cout<<"\nComenzando a medir Tiempo" << endl;
+    begin = clock(); //Empieza el contador
+
     cout<<" \nCANTIDAD TOTAL DE ARTICULOS: "<<total_art<<endl;
+
+    clock_t end = clock();
+    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
+    cout<<"\nTardo elapsed_secs " << elapsed_secs << "\n" << std::endl;
 }
 
 void Total_Articulos_Diferentes(int total_art_dif){
+    clock_t begin; //Declacaramos el contador
+    cout<<"\nComenzando a medir Tiempo" << endl;
+    begin = clock(); //Empieza el contador
+
     cout<<" \nCANTIDAD TOTAL DE ARTICULOS DIFERENTES: "<<total_art_dif<<endl;
+
+    clock_t end = clock();
+    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
+    cout<<"\nTardo elapsed_secs " << elapsed_secs << "\n" << std::endl;
 }
 
 void Min_Stock(int Cant_Stock_MinS, Lista<string> Lista_Min_Stock){
+    clock_t begin; //Declacaramos el contador
+    cout<<"\nComenzando a medir Tiempo" << endl;
+    begin = clock(); //Empieza el contador
+
     cout<<" \n--- ARTICULOS CON STOCK MENOR O IGUAL A "<<Cant_Stock_MinS<<" --- ";
     for(int i=0; i<Lista_Min_Stock.getTamanio(); i++){
         cout<<endl<<" Articulo: "<<Lista_Min_Stock.getDato(i);
     }
     cout<<endl;
+
+    clock_t end = clock();
+    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
+    cout<<"\nTardo elapsed_secs " << elapsed_secs << "\n" << std::endl;
 }
 
 void Min_Stock_Deposito(int Cant_Stock_MSD, int Num_Deposito, Lista<string> Lista_Min_Stock_Deposito){
+    clock_t begin; //Declacaramos el contador
+    cout<<"\nComenzando a medir Tiempo" << endl;
+    begin = clock(); //Empieza el contador
+
     cout<<" \n--- ARTICULOS CON STOCK MENOR O IGUAL A "<<Cant_Stock_MSD<<" EN EL DEPOSITO "<<Num_Deposito<<" --- ";
     for(int i=0; i<Lista_Min_Stock_Deposito.getTamanio(); i++){
         cout<<endl<<" Articulo: "<<Lista_Min_Stock_Deposito.getDato(i);
     }
     cout<<endl;
+
+    clock_t end = clock();
+    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
+    cout<<"\nTardo elapsed_secs " << elapsed_secs << "\n" << std::endl;
 }
 
 void Stock_Deposito(string nombre_articulo, int Num_deposito, HashMap<string, vector<int>> Hash_Articulos){
+    clock_t begin; //Declacaramos el contador
+    cout<<"\nComenzando a medir Tiempo" << endl;
+    begin = clock(); //Empieza el contador
+
     vector<int> Deposito;
     Deposito = Hash_Articulos.get(nombre_articulo);
     cout<<" \nCANTIDAD DE STOCK DE '"<<nombre_articulo<<"' EN EL DEPOSITO "<<Num_deposito<<": "<<Deposito[Num_deposito-1]<<endl;
+
+    clock_t end = clock();
+    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
+    cout<<"\nTardo elapsed_secs " << elapsed_secs << "\n" << std::endl;
 }
 
 void Stock_Nombre(string nombre_articulo, HashMap<string, vector<int>> Hash_Articulos){
+    clock_t begin; //Declacaramos el contador
+    cout<<"\nComenzando a medir Tiempo" << endl;
+    begin = clock(); //Empieza el contador
+
     vector<int> Deposito;
     int Cantidad_Stock = 0;
     Deposito = Hash_Articulos.get(nombre_articulo);
@@ -48,14 +92,26 @@ void Stock_Nombre(string nombre_articulo, HashMap<string, vector<int>> Hash_Arti
         Cantidad_Stock += Deposito[i];
     }
     cout<<" \nCANTIDAD DE STOCK DEL ARTICULO '"<<nombre_articulo<<"': "<<Cantidad_Stock<<endl;
+
+    clock_t end = clock();
+    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
+    cout<<"\nTardo elapsed_secs " << elapsed_secs << "\n" << std::endl;
 }
 
 void Max_Stock(int Cant_Stock_MaxS, Lista<string> Lista_Max_Stock){
+    clock_t begin; //Declacaramos el contador
+    cout<<"\nComenzando a medir Tiempo" << endl;
+    begin = clock(); //Empieza el contador
+
     cout<<" \n--- ARTICULOS CON STOCK MAYOR O IGUAL A "<<Cant_Stock_MaxS<<" --- ";
     for(int i=0; i<Lista_Max_Stock.getTamanio(); i++){
         cout<<endl<<" Articulo: "<<Lista_Max_Stock.getDato(i);
     }
     cout<<endl;
+
+    clock_t end = clock();
+    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
+    cout<<"\nTardo elapsed_secs " << elapsed_secs << "\n" << std::endl;
 }
 
 unsigned int HashFunc(string clave){
@@ -175,6 +231,8 @@ int main(int argc, char **argv){
     }
     archivo.close();
 
+
+
     //Total_Articulo Diferentes
     if(strcmp(argv[1],"-total_art_dif")==0) Total_Articulos_Diferentes(total_art_dif);
     //Total_Articulo
@@ -190,12 +248,5 @@ int main(int argc, char **argv){
     //Stock de un articulo por deposito
     if(strcmp(argv[1],"-stock")==0 && bandera==true) Stock_Deposito(Nombre_Articulo_Deposito, Num_Stock_Deposito, Hash_Articulos);
 
-    clock_t begin; //Declacaramos el contador
-    cout<<"\nComenzando a medir Tiempo" << endl;
-    begin = clock(); //Empieza el contador
-
-    clock_t end = clock();
-    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
-    cout<<"\nTardo elapsed_secs " << elapsed_secs << "\n" << std::endl;
     return 0;
 }
