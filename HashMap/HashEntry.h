@@ -1,14 +1,15 @@
 #ifndef U05_HASH_HASHMAP_HASHENTRY_H_
 #define U05_HASH_HASHMAP_HASHENTRY_H_
 #include <iostream>
+#include <vector>
 using namespace std;
-
-template <class K, class T> class HashEntry{
+template <class K, class T>
+class HashEntry
+{
 private:
     K clave;
     T valor;
 public:
-
     HashEntry(K c, T v){
         clave = c;
         valor = v;
@@ -27,7 +28,6 @@ public:
     void setValor(T v){
         valor = v;
     }
-
 };
 
 #endif // U05_HASH_HASHMAP_HASHENTRY_H_

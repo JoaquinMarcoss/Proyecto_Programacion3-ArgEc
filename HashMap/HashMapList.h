@@ -34,6 +34,8 @@ public:
 
     void print();
 
+    T get(K clave);
+
 };
 
 template <class K, class T>
@@ -125,5 +127,20 @@ void HashMapList<K, T>::getList(K clave) { //Método que devuelve la lista segú
         aux = aux->getSiguiente();
     }
 }
+
+template <class K, class T>
+T HashMapList<K, T>::get(K clave){
+    unsigned int pos = hashFuncP(clave) % tamanio;
+    if (tabla[pos] == NULL)
+    {
+        throw 404;
+    }
+    if(tabla[pos]->getClave() == clave){
+        return tabla[pos]->getValor();
+    }else{
+        throw 409;
+    }
+}
+
 
 #endif // U05_HASH_HASHMAP_HASHMAPLIST_H_
