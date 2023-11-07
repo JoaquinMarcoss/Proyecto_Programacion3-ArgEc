@@ -3,6 +3,8 @@
 #include <iostream>
 #include <time.h>
 #include <vector>
+#include <cstring>
+#include <string>
 #include "../Lista/Lista.h"
 #include "../HashMap/HashMap.h"
 #define ARCHIVO "C:\\Users\\Joaquin\\Desktop\\Proyecto_Programacion3-ArgEc\\Inventariado_Fisico.csv"
@@ -68,10 +70,55 @@ unsigned int HashFunc(string clave){
     return hash;
 }
 
-int main(){
+
+/* argc = Cuantos argumentos le estamos
+ *        pasando a la hora de ejecutarse
+ *
+ * argv = Cada uno de los argumentos dichos
+ *        (cadenas de caracteres)
+ */
+int main(int argc, char **argv){
+    int i, Cant_cols=0, total_art=0, total_art_dif=0,Num_Stock_Deposito=1, Num_Deposito=1, Cant_Stock_MSD=1, Cant_Stock_MinS=0, Cant_Stock_MaxS=0;
+    string Nombre_Articulo_Stock, Nombre_Articulo_Deposito;
+    int bandera=2;
+    cout<<"\nCantidad de argumentos: "<<argc<<endl;
+        //Minimo Stock
+        if(strcmp(argv[1],"-min_stock")==0) Cant_Stock_MinS = stoi(argv[2]);
+        //Maximo Stock
+        if(strcmp(argv[1],"-max_stock")==0) Cant_Stock_MaxS = stoi(argv[2]);
+        //Minimo Stock por deposito
+        if(strcmp(argv[1],"-min_stock")==0 && argc>3){
+            Cant_Stock_MSD = stoi(argv[2]);
+            Num_Deposito = stoi(argv[3]);
+        }
+        //Stock de un articulo
+        if(strcmp(argv[1],"-stock")==0){
+            for (i=2; i<argc; i++){
+                Nombre_Articulo_Stock += argv[i];
+                if(i<argc-1){
+                    Nombre_Articulo_Stock += " ";
+                }
+                bandera++;
+            }
+        }
+        //Stock de un articulo por deposito
+        if(strcmp(argv[1],"-stock")==0 && bandera!=argc){
+            for (i=2; i<argc-1; i++){
+                Nombre_Articulo_Deposito += argv[i];
+                if(i<argc-2){
+                    Nombre_Articulo_Deposito += " ";
+                }
+                cout<<endl<<bandera<<endl;
+                cout<<Nombre_Articulo_Deposito<<endl;
+            }
+            Num_Stock_Deposito = stoi(argv[argc-1]);
+            cout<<Num_Stock_Deposito<<endl;
+        }
+
+
     ifstream archivo(ARCHIVO);
     string line, Nombre_Art, Cols;
-    int i, Cant_cols=0, total_art=0, total_art_dif=0, Num_Deposito=3, Cant_Stock_MSD=6, Cant_Stock_MinS=20, Cant_Stock_MaxS=50;
+
     Lista<string> Lista_Min_Stock; //Listado de artículos que están en el mínimo de stock.
     Lista<string> Lista_Max_Stock; //Listado de artículos que igualan o superen determinada cantidad en stock.
     Lista<string> Lista_Min_Stock_Deposito; //Listado de artículos que están en el mínimo de stock y por depósito.
@@ -122,20 +169,25 @@ int main(){
 
         Hash_Articulos.put(Nombre_Art, Lista_Depositos);
     }
-
     archivo.close();
+    //Total_Articulo Diferentes
+    if(strcmp(argv[1],"-total_art_dif")==0) Total_Articulos_Diferentes(total_art_dif);
+    //Total_Articulo
+    if(strcmp(argv[1],"-total_art")==0) Total_Articulos(total_art);
+    //Minimo Stock
+    if(strcmp(argv[1],"-min_stock")==0 && argc==3) Min_Stock(Cant_Stock_MinS, Lista_Min_Stock);
+    //Maximo Stock
+    if(strcmp(argv[1],"-max_stock")==0) Max_Stock(Cant_Stock_MaxS, Lista_Max_Stock);
+    //Minimo Stock por deposito
+    if(strcmp(argv[1],"-min_stock")==0 && argc==4) Min_Stock_Deposito(Cant_Stock_MSD, Num_Deposito, Lista_Min_Stock_Deposito);
+    //Stock de un articulo
+    if(strcmp(argv[1],"-stock")==0 && bandera==argc) Stock_Nombre(Nombre_Articulo_Stock, Hash_Articulos);
+    //Stock de un articulo por deposito
+    if(strcmp(argv[1],"-stock")==0 && bandera!=argc) Stock_Deposito(Nombre_Articulo_Deposito, Num_Stock_Deposito, Hash_Articulos);
 
     clock_t begin; //Declacaramos el contador
     cout<<"\nComenzando a medir Tiempo" << endl;
     begin = clock(); //Empieza el contador
-
-    //Total_Articulos(total_art);
-    //Total_Articulos_Diferentes(total_art_dif);
-    //Min_Stock(Cant_Stock_MinS, Lista_Min_Stock);
-    //Max_Stock(Cant_Stock_MaxS, Lista_Max_Stock);
-    //Stock_Nombre("GRIFERIA VASSER RHODA/TROYA  15/2302", Hash_Articulos);
-    //Stock_Deposito("GRIFERIA VASSER RHODA/TROYA  15/2302", 1, Hash_Articulos);
-    //Min_Stock_Deposito(Cant_Stock_MSD, Num_Deposito, Lista_Min_Stock_Deposito);
 
     clock_t end = clock();
     double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
