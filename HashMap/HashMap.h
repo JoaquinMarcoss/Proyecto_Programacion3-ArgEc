@@ -72,7 +72,7 @@ template <class K, class T>
 T HashMap<K, T>::get(K clave){
     unsigned int pos = hashFuncP(clave) % tamanio;
     if (tabla[pos] == NULL){
-        cout<<endl<<"ARTICULO NO ENCONTRADOXD"<<endl;
+        cout<<endl<<"ARTICULO NO ENCONTRADO"<<endl;
         throw 404;
     }
 

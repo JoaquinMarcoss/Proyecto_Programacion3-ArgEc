@@ -80,41 +80,45 @@ unsigned int HashFunc(string clave){
 int main(int argc, char **argv){
     int i, Cant_cols=0, total_art=0, total_art_dif=0,Num_Stock_Deposito=1, Num_Deposito=1, Cant_Stock_MSD=1, Cant_Stock_MinS=0, Cant_Stock_MaxS=0;
     string Nombre_Articulo_Stock, Nombre_Articulo_Deposito;
-    int bandera=2;
-    cout<<"\nCantidad de argumentos: "<<argc<<endl;
-        //Minimo Stock
-        if(strcmp(argv[1],"-min_stock")==0) Cant_Stock_MinS = stoi(argv[2]);
-        //Maximo Stock
-        if(strcmp(argv[1],"-max_stock")==0) Cant_Stock_MaxS = stoi(argv[2]);
-        //Minimo Stock por deposito
-        if(strcmp(argv[1],"-min_stock")==0 && argc>3){
-            Cant_Stock_MSD = stoi(argv[2]);
-            Num_Deposito = stoi(argv[3]);
-        }
-        //Stock de un articulo
-        if(strcmp(argv[1],"-stock")==0){
-            for (i=2; i<argc; i++){
-                Nombre_Articulo_Stock += argv[i];
-                if(i<argc-1){
-                    Nombre_Articulo_Stock += " ";
-                }
-                bandera++;
-            }
-        }
-        //Stock de un articulo por deposito
-        if(strcmp(argv[1],"-stock")==0 && bandera!=argc){
-            for (i=2; i<argc-1; i++){
-                Nombre_Articulo_Deposito += argv[i];
-                if(i<argc-2){
-                    Nombre_Articulo_Deposito += " ";
-                }
-                cout<<endl<<bandera<<endl;
-                cout<<Nombre_Articulo_Deposito<<endl;
-            }
-            Num_Stock_Deposito = stoi(argv[argc-1]);
-            cout<<Num_Stock_Deposito<<endl;
-        }
+    bool bandera=false;
 
+    //cout<<"\nCantidad de argumentos: "<<argc<<endl;
+    //Minimo Stock
+    if(strcmp(argv[1],"-min_stock")==0) Cant_Stock_MinS = stoi(argv[2]);
+    //Maximo Stock
+    if(strcmp(argv[1],"-max_stock")==0) Cant_Stock_MaxS = stoi(argv[2]);
+    //Minimo Stock por deposito
+    if(strcmp(argv[1],"-min_stock")==0 && argc>3){
+        Cant_Stock_MSD = stoi(argv[2]);
+        Num_Deposito = stoi(argv[3]);
+    }
+
+    try{
+        if(stoi(argv[argc-1])<=5) bandera = true;
+    }catch(const invalid_argument& error){
+        bandera = false;
+    }
+
+    //Stock de un articulo
+    if(strcmp(argv[1],"-stock")==0 && bandera==false){
+        for (i=2; i<argc; i++){
+            Nombre_Articulo_Stock += argv[i];
+            if(i<argc-1){
+                Nombre_Articulo_Stock += " ";
+            }
+        }
+    }
+
+    //Stock de un articulo por deposito
+    if(strcmp(argv[1],"-stock")==0 && bandera==true){
+        for (i=2; i<argc-1; i++){
+            Nombre_Articulo_Deposito += argv[i];
+            if(i<argc-2){
+                Nombre_Articulo_Deposito += " ";
+            }
+        }
+        Num_Stock_Deposito = stoi(argv[argc-1]);
+    }
 
     ifstream archivo(ARCHIVO);
     string line, Nombre_Art, Cols;
@@ -170,6 +174,7 @@ int main(int argc, char **argv){
         Hash_Articulos.put(Nombre_Art, Lista_Depositos);
     }
     archivo.close();
+
     //Total_Articulo Diferentes
     if(strcmp(argv[1],"-total_art_dif")==0) Total_Articulos_Diferentes(total_art_dif);
     //Total_Articulo
@@ -181,9 +186,9 @@ int main(int argc, char **argv){
     //Minimo Stock por deposito
     if(strcmp(argv[1],"-min_stock")==0 && argc==4) Min_Stock_Deposito(Cant_Stock_MSD, Num_Deposito, Lista_Min_Stock_Deposito);
     //Stock de un articulo
-    if(strcmp(argv[1],"-stock")==0 && bandera==argc) Stock_Nombre(Nombre_Articulo_Stock, Hash_Articulos);
+    if(strcmp(argv[1],"-stock")==0 && bandera==false) Stock_Nombre(Nombre_Articulo_Stock, Hash_Articulos);
     //Stock de un articulo por deposito
-    if(strcmp(argv[1],"-stock")==0 && bandera!=argc) Stock_Deposito(Nombre_Articulo_Deposito, Num_Stock_Deposito, Hash_Articulos);
+    if(strcmp(argv[1],"-stock")==0 && bandera==true) Stock_Deposito(Nombre_Articulo_Deposito, Num_Stock_Deposito, Hash_Articulos);
 
     clock_t begin; //Declacaramos el contador
     cout<<"\nComenzando a medir Tiempo" << endl;
