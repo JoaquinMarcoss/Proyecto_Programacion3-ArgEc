@@ -87,10 +87,11 @@ T HashMap<K, T>::get(K clave){
 template <class K, class T>
 void HashMap<K, T>::put(K clave, T valor){
     unsigned int pos = hashFuncP(clave) % tamanio;
+    unsigned int newPos;
 
-    while(tabla[pos] != NULL){
+    //Manejar la Colision!!!!!!!
+    while(tabla[pos] != nullptr){
         pos++;
-        //Manejar la Colision!!!!!!!
     }
 
     tabla[pos] = new HashEntry<K, T>(clave, valor); //Corresponde a una fila en la tabla HASH

@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include <time.h>
+#include<stdlib.h>
+#include <cstdlib>
 #include <vector>
 #include <cstring>
 #include <string>
@@ -114,18 +116,19 @@ void Max_Stock(int Cant_Stock_MaxS, Lista<string> Lista_Max_Stock){
     cout<<"\nTardo elapsed_secs " << elapsed_secs << "\n" << std::endl;
 }
 
-unsigned int HashFunc(string clave){
+
+unsigned int HashFunc(string clave) {
     unsigned int hash = 0;
-    // Sumar los valores ASCII de los caracteres en la clave
+    unsigned int factor = 31; // Un número primo para mezclar
+
+    // Sumar los valores ASCII de los caracteres en la clave con rotación
     for (char c : clave){
-        hash += static_cast<unsigned int>(c);
+        hash = (hash*factor) ^ static_cast<unsigned int>(c);
     }
-    // Aplicar una operación módulo para obtener un índice válido en la tabla hash
-    hash = hash % 2087;
-    //cout<<endl<<" Hash para la clave '"<<clave<<"': "<<hash;
+
+    hash = hash % 10111; // Aplicar una operación módulo para obtener un índice válido en la tabla hash
     return hash;
 }
-
 
 /* argc = Cuantos argumentos le estamos
  *        pasando a la hora de ejecutarse
@@ -133,13 +136,10 @@ unsigned int HashFunc(string clave){
  * argv = Cada uno de los argumentos dichos
  *        (cadenas de caracteres)
  */
-
-
 int main(int argc, char **argv){
     int i, Cant_cols=0, total_art=0, total_art_dif=0, Num_Stock_Deposito=1, Num_Deposito=1;
     int Cant_Stock_MSD=1, Cant_Stock_MinS=0, Cant_Stock_MaxS=0;
     string Nombre_Articulo_Stock, Nombre_Articulo_Deposito;
-
     //Minimo Stock
     if (strcmp(argv[1], "-min_stock") == 0){
         try{
@@ -191,7 +191,7 @@ int main(int argc, char **argv){
     Lista<string> Lista_Min_Stock; //Listado de artículos que están en el mínimo de stock.
     Lista<string> Lista_Max_Stock; //Listado de artículos que igualan o superen determinada cantidad en stock.
     Lista<string> Lista_Min_Stock_Deposito; //Listado de artículos que están en el mínimo de stock y por depósito.
-    HashMap<string, vector<int>> Hash_Articulos(2087, HashFunc); //Hashmap de los articulos y sus depositos.
+    HashMap<string, vector<int>> Hash_Articulos(10111, HashFunc); //Hashmap de los articulos y sus depositos.
 
     getline(archivo, line); //Descartamos el encabezado
     stringstream encabezado(line);
