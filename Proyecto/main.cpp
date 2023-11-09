@@ -2,8 +2,6 @@
 #include <fstream>
 #include <iostream>
 #include <time.h>
-#include<stdlib.h>
-#include <cstdlib>
 #include <vector>
 #include <cstring>
 #include <string>
@@ -126,7 +124,7 @@ unsigned int HashFunc(string clave) {
         hash = (hash*factor) ^ static_cast<unsigned int>(c);
     }
 
-    hash = hash % 10111; // Aplicar una operación módulo para obtener un índice válido en la tabla hash
+    hash = hash % 10111; //Aplicar una operación módulo para obtener un índice válido en la tabla hash
     return hash;
 }
 
@@ -140,6 +138,7 @@ int main(int argc, char **argv){
     int i, Cant_cols=0, total_art=0, total_art_dif=0, Num_Stock_Deposito=1, Num_Deposito=1;
     int Cant_Stock_MSD=1, Cant_Stock_MinS=0, Cant_Stock_MaxS=0;
     string Nombre_Articulo_Stock, Nombre_Articulo_Deposito;
+
     //Minimo Stock
     if (strcmp(argv[1], "-min_stock") == 0){
         try{
@@ -205,13 +204,15 @@ int main(int argc, char **argv){
         string word;
         int num, Cant_art=0, pos=0;
 
-        vector<int> Lista_Depositos(Cant_cols-3, 0);
+        vector<int> Lista_Depositos(Cant_cols-3, 0); //Vector para los depositos de cada producto
 
         for (i = 0; i < Cant_cols; i++){
             getline(files, word, ',');
 
+            //if para el nombre del producto
             if(i==2) Nombre_Art = word;
 
+            //if para acceder a los depositos
             if (i>2){
                 if(!word.empty()){
                     num = stoi(word);
@@ -241,10 +242,9 @@ int main(int argc, char **argv){
     archivo.close();
 
 
-
-    //Total_Articulo Diferentes
+    //Total Articulo Diferentes
     if(strcmp(argv[1],"-total_art_dif")==0) Total_Articulos_Diferentes(total_art_dif);
-    //Total_Articulo
+    //Total Articulo
     if(strcmp(argv[1],"-total_art")==0) Total_Articulos(total_art);
     //Minimo Stock
     if(strcmp(argv[1],"-min_stock")==0 && argc==3) Min_Stock(Cant_Stock_MinS, Lista_Min_Stock);
